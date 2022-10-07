@@ -1,5 +1,7 @@
 #pragma once
 
+#include<vector>
+#include"Vec2.h"
 class SelectMenu
 {
 public:
@@ -15,7 +17,18 @@ public:
 	//描画
 	void draw();
 
+	//カーソルの初期化
+	void setupCursor();
+	
+	//表示位置の設定
+	void setPos(float x, float y);
+	void setPos(Vec2 pos);
+	//メニュー項目の追加
+	void addItem(const char* text);
 
+	//ウインドウサイズの取得
+	int getWindowWidth();
+	int getWindowHeight();
 private:
 	class Item
 	{
@@ -23,12 +36,43 @@ private:
 		Item();
 		virtual ~Item();		//名前かぶりを避けるためクラスの中にクラスを作る
 
+		//メニュー項目の表示
+		void draw(int x, int y);
+
+		//表示する文字列を設定
 		void setText(const char* text);
+		//文字列の取得幅
+		int getTextWidth();
 	private:
 		//表示する文字列
 		const char* m_text;
 	};
 
-private:
+	class Cursor
+	{
+	public:
+		Cursor();
+		virtual ~Cursor();
+		
+		//表示
+		void draw();
 
+		void setMenuPos(Vec2 pos) { m_menuPos = pos; }
+		void setSize(Vec2 size) { m_size = size; }
+	private:
+		//メニューの表示位置
+		Vec2 m_menuPos;
+		// カーソルのサイズ
+		Vec2 m_size;
+		//選択している項目の番号
+		int m_selectIndex;
+	};
+
+private:
+	//表示位置（左上座標）
+	Vec2 m_pos;
+	//メニューの選択項目
+	std::vector<Item*> m_pItem;
+	//カーソル
+	Cursor m_cursor;
 };
